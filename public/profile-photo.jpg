@@ -1,0 +1,6 @@
+<!-- Placeholder for profile photo -->
+<!-- Replace this with your actual profile photo -->
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#1677ff"/>
+  <text x="100" y="100" font-family="Arial" font-size="14" fill="white" text-anchor="middle" dy=".3em">Profile Photo</text>
+</svg>

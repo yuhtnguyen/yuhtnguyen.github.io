@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Typography, Button, Row, Col, Carousel } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 

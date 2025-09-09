@@ -1,14 +1,113 @@
+/* CSS Variables for better maintainability and performance */
+:root {
+  /* Color scheme */
+  --primary-color: #1677ff;
+  --primary-light: #69c0ff;
+  --primary-dark: #0958d9;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --text-light: #999;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #fafafa;
+  --border-color: #d9d9d9;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.2);
+  
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --line-height-base: 1.6;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 40px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Z-index scale */
+  --z-index-navbar: 1000;
+  --z-index-modal: 1010;
+  --z-index-tooltip: 1020;
+  --z-index-chatbot: 1030;
+}
+
+/* Performance optimizations */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Smooth scrolling với performance optimization */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Base body styles với performance improvements */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #f5f5f5;
+  font-family: var(--font-family);
+  line-height: var(--line-height-base);
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Performance utilities */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Layout spacing utilities */
+.container-safe-padding {
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+.content-safe-margin {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+}
+
+/* Ensure minimum safe spacing on all devices */
+.safe-spacing {
+  padding: var(--spacing-md);
+  min-height: 100vh;
 }
 
 #root {
@@ -108,6 +207,8 @@ body {
   margin-bottom: 0px; /* Giữ khoảng cách an toàn với footer */
   padding-top: 64px; /* Bù lại cho header fixed */
   padding-bottom: 0px; /* Loại bỏ khoảng trắng với footer */
+  padding-left: 0; /* Đảm bảo không có padding ngang thêm */
+  padding-right: 0; /* Đảm bảo không có padding ngang thêm */
 }
 
 /* Override layout content for home page */
@@ -157,12 +258,12 @@ body {
 /* Mobile optimizations */
 @media (max-width: 768px) {
   .ant-layout-content {
-    padding: 12px;
+    padding: 16px; /* Tăng từ 12px lên 16px để tránh sát lề */
     margin-top: 64px;
   }
   
   .page-container {
-    padding: 20px 8px;
+    padding: 24px 16px; /* Tăng từ 20px 8px lên 24px 16px */
   }
   
   .section-title {
@@ -207,7 +308,7 @@ body {
 
   /* Balanced padding for carousel content on mobile */
   .home-container .ant-col {
-    padding: 30px !important;
+    padding: 20px !important; /* Giảm từ 30px xuống 20px để phù hợp mobile */
   }
 
   /* Adjust home container spacing on mobile */
@@ -216,6 +317,8 @@ body {
     margin-bottom: -12px !important; /* Điều chỉnh cho mobile */
     padding-top: 64px !important;
     padding-bottom: 0px !important;
+    padding-left: 0 !important; /* Đảm bảo không có padding ngang */
+    padding-right: 0 !important; /* Đảm bảo không có padding ngang */
   }
 
   /* Adjust custom dots on mobile */
@@ -246,11 +349,11 @@ body {
 
 @media (max-width: 480px) {
   .ant-layout-content {
-    padding: 8px;
+    padding: 12px; /* Tăng từ 8px lên 12px để tránh sát lề */
   }
   
   .page-container {
-    padding: 16px 4px;
+    padding: 20px 12px; /* Tăng từ 16px 4px lên 20px 12px */
   }
   
   .section-title {

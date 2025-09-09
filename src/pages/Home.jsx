@@ -36,8 +36,8 @@ const SLIDE_DATA = [
 const STYLES = {
   container: {
     marginTop: "-88px",
-    marginLeft: "-24px",
-    marginRight: "-24px",
+    marginLeft: "0", // Đổi từ -24px về 0 để cân bằng
+    marginRight: "0", // Đổi từ -24px về 0 để cân bằng
     marginBottom: "0px",
     width: "100vw",
     overflow: "hidden",
@@ -53,7 +53,7 @@ const STYLES = {
     alignItems: "center",
     justifyContent: "center",
     background: "linear-gradient(135deg, #ffeef7 0%, #ffc1cc 100%)",
-    padding: "35px 20px",
+    padding: "35px", // Đổi từ "35px 20px" thành "35px" để trái/phải bằng nhau
   },
   panel: {
     maxWidth: "1400px",
@@ -64,6 +64,7 @@ const STYLES = {
     overflow: "hidden",
     minHeight: "500px",
     height: "auto",
+    margin: "0 auto", // Đảm bảo panel được căn giữa
   },
   contentCol: {
     padding: "45px",
@@ -139,8 +140,8 @@ const STYLES = {
     cursor: "pointer",
   },
   imageSpecial: {
-    gridColumn: "1", 
-    gridRow: "span 2", 
+    gridColumn: "1",
+    gridRow: "span 2",
   },
   dotsContainer: {
     position: "absolute",

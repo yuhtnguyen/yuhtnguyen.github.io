@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { 
   Button, 
   Input, 
@@ -37,47 +37,74 @@ const ChatBot = () => {
   const [isTyping, setIsTyping] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const messagesEndRef = useRef(null)
+  const abortControllerRef = useRef(null)
 
-  const scrollToBottom = () => {
+  // Memoized scroll function
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  }, [])
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, scrollToBottom])
 
-  // AI-powered chatbot responses
-  const getBotResponse = async (userMessage) => {
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
+  }, [])
+
+  // AI-powered chatbot responses với error handling tốt hơn
+  const getBotResponse = useCallback(async (userMessage) => {
     try {
-      const response = await aiService.getAIResponse(userMessage)
+      // Create abort controller for this request
+      abortControllerRef.current = new AbortController()
+      
+      const response = await aiService.getAIResponse(userMessage, {
+        signal: abortControllerRef.current.signal
+      })
       return response
     } catch (error) {
+      if (error.name === 'AbortError') {
+        return null // Request was cancelled
+      }
       console.error('AI Response Error:', error)
       return "Xin lỗi, tôi đang gặp một chút vấn đề kỹ thuật. Bạn có thể thử hỏi lại hoặc check out các trang About, Projects, Resume để tìm hiểu thêm về Thuy nhé! 😅"
     }
-  }
+  }, [])
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = useCallback(async () => {
     if (!inputValue.trim() || isProcessing) return
 
     const userMessage = {
       id: Date.now(),
-      text: inputValue,
+      text: inputValue.trim(),
       sender: 'user',
       timestamp: new Date()
     }
 
     setMessages(prev => [...prev, userMessage])
+    const currentInput = inputValue.trim()
     setInputValue('')
     setIsTyping(true)
     setIsProcessing(true)
 
     try {
       // Get AI response
-      const botResponseText = await getBotResponse(inputValue)
+      const botResponseText = await getBotResponse(currentInput)
       
-      // Simulate realistic typing delay
-      const typingDelay = Math.min(botResponseText.length * 30, 3000) // Max 3 seconds
+      // Check if request was cancelled
+      if (botResponseText === null) {
+        setIsTyping(false)
+        setIsProcessing(false)
+        return
+      }
+      
+      // Simulate realistic typing delay (optimized)
+      const typingDelay = Math.min(Math.max(botResponseText.length * 20, 500), 2000) // 0.5s-2s
       
       setTimeout(() => {
         const botResponse = {
@@ -107,18 +134,19 @@ const ChatBot = () => {
         setIsProcessing(false)
       }, 1000)
     }
-  }
+  }, [inputValue, isProcessing, getBotResponse])
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage()
     }
-  }
+  }, [handleSendMessage])
 
-  const formatTime = (date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  }
+  // Memoized time formatter
+  const formatTime = useMemo(() => {
+    return (date) => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  }, [])
 
   if (!isOpen) {
     return (

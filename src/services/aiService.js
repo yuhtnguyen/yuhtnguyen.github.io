@@ -90,16 +90,55 @@ RESPONSE GUIDELINES:
 `
 
 // Gemini AI Configuration (Free API)
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'YOUR_GEMINI_API_KEY'
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent'
 
 // OpenAI Configuration (Alternative - có phí)
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || 'YOUR_OPENAI_API_KEY'
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
+
+// Rate limiting
+const RATE_LIMIT = {
+  maxRequests: 10,
+  timeWindow: 60000, // 1 minute
+  requests: []
+}
 
 export class AIService {
   constructor() {
     this.conversationHistory = []
+    this.cache = new Map() // Simple cache để tối ưu performance
+  }
+
+  // Rate limiting để tránh spam requests
+  checkRateLimit() {
+    const now = Date.now()
+    RATE_LIMIT.requests = RATE_LIMIT.requests.filter(
+      time => now - time < RATE_LIMIT.timeWindow
+    )
+    
+    if (RATE_LIMIT.requests.length >= RATE_LIMIT.maxRequests) {
+      throw new Error('Too many requests. Please wait a moment.')
+    }
+    
+    RATE_LIMIT.requests.push(now)
+  }
+
+  // Simple cache để avoid duplicate requests
+  getCachedResponse(userMessage) {
+    const cacheKey = userMessage.toLowerCase().trim()
+    return this.cache.get(cacheKey)
+  }
+
+  setCachedResponse(userMessage, response) {
+    const cacheKey = userMessage.toLowerCase().trim()
+    this.cache.set(cacheKey, response)
+    
+    // Keep cache size reasonable
+    if (this.cache.size > 50) {
+      const firstKey = this.cache.keys().next().value
+      this.cache.delete(firstKey)
+    }
   }
 
   // Enhanced language detection
@@ -116,10 +155,10 @@ export class AIService {
     return hasVietnameseChars || vietnameseKeywords || informalVietnamese
   }
 
-  // Sử dụng Gemini AI (Google - miễn phí)
-  async getGeminiResponse(userMessage) {
+  // Sử dụng Gemini AI (Google - miễn phí) với better error handling
+  async getGeminiResponse(userMessage, options = {}) {
     try {
-      if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY') {
+      if (!GEMINI_API_KEY) {
         throw new Error('Gemini API key not configured')
       }
 
@@ -132,42 +171,54 @@ export class AIService {
         ? "QUAN TRỌNG: Người dùng hỏi bằng tiếng Việt. Bạn PHẢI trả lời hoàn toàn bằng tiếng Việt. Không dùng từ tiếng Anh nào."
         : "IMPORTANT: User asked in English. You MUST respond completely in English. Do not use any Vietnamese words."
 
-      const response = await axios.post(
-        `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
-        {
-          contents: [{
-            parts: [{
-              text: `${PORTFOLIO_CONTEXT}
+      const requestBody = {
+        contents: [{
+          parts: [{
+            text: `${PORTFOLIO_CONTEXT}
 
 ${languageInstruction}
 
 User message: "${userMessage}"
 
 Your response (remember to match the user's language exactly):`
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 200,
-            stopSequences: []
-          }
-        },
+          }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 200,
+          stopSequences: []
+        }
+      }
+
+      const response = await axios.post(
+        `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+        requestBody,
         {
           headers: {
             'Content-Type': 'application/json',
           },
-          timeout: 10000 // 10 seconds timeout
+          timeout: 10000, // 10 seconds timeout
+          signal: options.signal // Support for AbortController
         }
       )
 
-      const aiResponse = response.data.candidates[0].content.parts[0].text
+      const aiResponse = response.data.candidates?.[0]?.content?.parts?.[0]?.text
+      
+      if (!aiResponse) {
+        throw new Error('Invalid response from Gemini AI')
+      }
+
       console.log('✅ Gemini AI Response:', aiResponse)
       return aiResponse
 
     } catch (error) {
       console.error('❌ Gemini AI Error:', error.response?.data || error.message)
+      
+      if (error.name === 'AbortError') {
+        throw error // Re-throw abort errors
+      }
       
       if (error.response?.status === 400) {
         throw new Error('Invalid API request. Please check your API key.')
@@ -181,16 +232,16 @@ Your response (remember to match the user's language exactly):`
     }
   }
 
-  // Sử dụng OpenAI (có phí nhưng chất lượng cao)
-  async getOpenAIResponse(userMessage) {
+  // Sử dụng OpenAI (có phí nhưng chất lượng cao) với improved error handling
+  async getOpenAIResponse(userMessage, options = {}) {
     try {
-      if (!OPENAI_API_KEY || OPENAI_API_KEY === 'YOUR_OPENAI_API_KEY') {
+      if (!OPENAI_API_KEY) {
         throw new Error('OpenAI API key not configured')
       }
 
       const messages = [
         { role: 'system', content: PORTFOLIO_CONTEXT },
-        ...this.conversationHistory,
+        ...this.conversationHistory.slice(-10), // Only last 10 messages to save tokens
         { role: 'user', content: userMessage }
       ]
 
@@ -206,13 +257,20 @@ Your response (remember to match the user's language exactly):`
           headers: {
             'Authorization': `Bearer ${OPENAI_API_KEY}`,
             'Content-Type': 'application/json',
-          }
+          },
+          timeout: 15000, // 15 seconds timeout
+          signal: options.signal
         }
       )
 
       return response.data.choices[0].message.content
     } catch (error) {
       console.error('OpenAI Error:', error)
+      
+      if (error.name === 'AbortError') {
+        throw error
+      }
+      
       throw error
     }
   }
@@ -268,34 +326,63 @@ Your response (remember to match the user's language exactly):`
       "I understand you want to learn more about Thuy! She's a very talented developer with experience in both development and QA. You can ask about her projects, technical skills, work experience, or how to contact her! 😊"
   }
 
-  // Main method để get AI response
-  async getAIResponse(userMessage) {
+  // Main method để get AI response với caching và rate limiting
+  async getAIResponse(userMessage, options = {}) {
     try {
+      // Input validation
+      if (!userMessage || typeof userMessage !== 'string') {
+        throw new Error('Invalid user message')
+      }
+
+      const trimmedMessage = userMessage.trim()
+      if (!trimmedMessage) {
+        throw new Error('Empty message')
+      }
+
+      // Check rate limit
+      this.checkRateLimit()
+
+      // Check cache first
+      const cachedResponse = this.getCachedResponse(trimmedMessage)
+      if (cachedResponse) {
+        console.log('📦 Using cached response')
+        return cachedResponse
+      }
+
+      let response
+
       // Thử Gemini AI trước (miễn phí)
-      if (GEMINI_API_KEY && GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY') {
-        const response = await this.getGeminiResponse(userMessage)
-        this.addToHistory(userMessage, response)
-        return response
+      if (GEMINI_API_KEY) {
+        response = await this.getGeminiResponse(trimmedMessage, options)
       }
-      
       // Fallback to OpenAI nếu có API key
-      if (OPENAI_API_KEY && OPENAI_API_KEY !== 'YOUR_OPENAI_API_KEY') {
-        const response = await this.getOpenAIResponse(userMessage)
-        this.addToHistory(userMessage, response)
-        return response
+      else if (OPENAI_API_KEY) {
+        response = await this.getOpenAIResponse(trimmedMessage, options)
       }
-      
       // Fallback to local AI simulation
-      const response = this.getLocalAIResponse(userMessage)
-      this.addToHistory(userMessage, response)
+      else {
+        response = this.getLocalAIResponse(trimmedMessage)
+      }
+
+      // Cache the response
+      if (response) {
+        this.setCachedResponse(trimmedMessage, response)
+        this.addToHistory(trimmedMessage, response)
+      }
+
       return response
       
     } catch (error) {
       console.error('AI Service Error:', error)
+      
+      if (error.name === 'AbortError') {
+        throw error // Don't fallback for cancelled requests
+      }
+
       // Fallback to local response if API fails
-      const response = this.getLocalAIResponse(userMessage)
-      this.addToHistory(userMessage, response)
-      return response
+      const fallbackResponse = this.getLocalAIResponse(userMessage)
+      this.addToHistory(userMessage, fallbackResponse)
+      return fallbackResponse
     }
   }
 
@@ -313,6 +400,21 @@ Your response (remember to match the user's language exactly):`
 
   clearHistory() {
     this.conversationHistory = []
+    this.cache.clear()
+  }
+
+  // Method để clear cache manually
+  clearCache() {
+    this.cache.clear()
+  }
+
+  // Get stats cho debugging
+  getStats() {
+    return {
+      historyLength: this.conversationHistory.length,
+      cacheSize: this.cache.size,
+      rateLimitRequests: RATE_LIMIT.requests.length
+    }
   }
 }
 

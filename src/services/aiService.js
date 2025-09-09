@@ -102,6 +102,20 @@ export class AIService {
     this.conversationHistory = []
   }
 
+  // Enhanced language detection
+  detectVietnamese(text) {
+    // Check Unicode Vietnamese characters
+    const hasVietnameseChars = /[\u00C0-\u1EF9]/.test(text)
+    
+    // Check Vietnamese keywords (more comprehensive)
+    const vietnameseKeywords = /\b(là|có|gì|sao|như|thế|nào|tôi|bạn|cô|anh|em|của|về|với|trong|này|đó|rất|nhiều|ở|từ|và|hay|khi|đã|sẽ|được|không|có thể|làm|hỏi|biết|hiểu|xin|chào|dự án|kỹ năng|kinh nghiệm|liên hệ|j|ko|k|đc|dc|mik|mk|tui|gì|dzậy|dzậy|vậy|sống|học|việc|lm|làm|proj|project)\b/i.test(text)
+    
+    // Check Vietnamese informal patterns
+    const informalVietnamese = /\b(j|ko|k|đc|dc|mik|mk|tui|dzậy|vậy|lm)\b/i.test(text)
+    
+    return hasVietnameseChars || vietnameseKeywords || informalVietnamese
+  }
+
   // Sử dụng Gemini AI (Google - miễn phí)
   async getGeminiResponse(userMessage) {
     try {
@@ -111,13 +125,12 @@ export class AIService {
 
       console.log('🤖 Calling Gemini AI...', { userMessage })
 
-      // Detect user language
-      const isVietnamese = /[\u00C0-\u1EF9]/.test(userMessage) || 
-                          /\b(là|có|gì|sao|như|thế|nào|tôi|bạn|cô|anh|em|của|về|với|trong|này|đó|rất|nhiều|ở|từ|và|hay|khi|đã|sẽ|được|không|có thể|làm|hỏi|biết|hiểu)\b/i.test(userMessage)
-
+      // Better language detection
+      const isVietnamese = this.detectVietnamese(userMessage)
+      
       const languageInstruction = isVietnamese 
-        ? "CRITICAL: User asked in Vietnamese. You MUST respond in Vietnamese only. Do not use any English words."
-        : "CRITICAL: User asked in English. You MUST respond in English only. Do not use any Vietnamese words."
+        ? "QUAN TRỌNG: Người dùng hỏi bằng tiếng Việt. Bạn PHẢI trả lời hoàn toàn bằng tiếng Việt. Không dùng từ tiếng Anh nào."
+        : "IMPORTANT: User asked in English. You MUST respond completely in English. Do not use any Vietnamese words."
 
       const response = await axios.post(
         `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
@@ -208,104 +221,51 @@ Your response (remember to match the user's language exactly):`
   getLocalAIResponse(userMessage) {
     const message = userMessage.toLowerCase()
     
+    // Use enhanced language detection
+    const isVietnamese = this.detectVietnamese(userMessage)
+    
     // Phân tích intent và trả lời thông minh hơn
-    if (message.includes('xin chào') || message.includes('hello') || message.includes('hi')) {
-      return this.generateContextualGreeting()
+    if (message.includes('xin chào') || message.includes('hello') || message.includes('hi') || message.includes('chào')) {
+      return isVietnamese 
+        ? "Xin chào! Tôi là AI assistant của Thúy. Tôi có thể giúp bạn tìm hiểu về kỹ năng lập trình, kinh nghiệm làm việc và các dự án của cô ấy. Bạn muốn biết gì nhất? 😊"
+        : "Hello! I'm Thuy's AI assistant. I can help you learn about her programming skills, work experience, and projects. What would you like to know? 😊"
+    }
+    
+    // Handle experience questions (common pattern)
+    if (message.includes('kinh nghiệm') || message.includes('experience') || message.includes('làm việc') || message.includes('work')) {
+      return isVietnamese
+        ? "Thúy có career path rất ấn tượng! Cô ấy bắt đầu là Junior Developer (2021-2022), sau đó làm QA Engineer (2022-2023), và hiện tại là Full Stack Developer (2023-nay) tại Tech Solutions Inc. Sự kết hợp kinh nghiệm dev + QA giúp cô ấy tạo ra những sản phẩm chất lượng cao! ⭐"
+        : "Thuy has an impressive career progression! She started as a Junior Developer (2021-2022), then worked as QA Engineer (2022-2023), and currently serves as Full Stack Developer (2023-present) at Tech Solutions Inc. Her dev + QA experience ensures high-quality products! ⭐"
     }
     
     if (message.includes('dự án') || message.includes('project')) {
-      return this.generateProjectResponse(message)
+      return isVietnamese
+        ? "Thúy đã phát triển nhiều dự án thú vị! Nổi bật nhất là E-Commerce Platform (React + Node.js + MongoDB), Task Management App với real-time features, và Weather Dashboard. Mỗi dự án đều thể hiện kỹ năng full-stack và UX/UI design tuyệt vời! 🚀"
+        : "Thuy has built amazing projects! Her highlights include E-Commerce Platform (React + Node.js + MongoDB), Task Management App with real-time features, and Weather Dashboard. Each project showcases excellent full-stack and UX/UI design skills! 🚀"
     }
     
-    if (message.includes('kỹ năng') || message.includes('skill') || message.includes('công nghệ')) {
-      return this.generateSkillResponse(message)
+    if (message.includes('kỹ năng') || message.includes('skill') || message.includes('công nghệ') || message.includes('tech')) {
+      return isVietnamese
+        ? "Thúy là Full Stack Developer với skillset rất mạnh! Frontend: React, TypeScript, Next.js, Ant Design. Backend: Node.js, Python, Express.js. Database: MongoDB, PostgreSQL. Testing: Jest, Cypress, Selenium (đặc biệt giỏi QA). Tools: Docker, AWS, Git. 💻"
+        : "Thuy is a Full Stack Developer with impressive skills! Frontend: React, TypeScript, Next.js, Ant Design. Backend: Node.js, Python, Express.js. Database: MongoDB, PostgreSQL. Testing: Jest, Cypress, Selenium (especially strong in QA). Tools: Docker, AWS, Git. 💻"
     }
     
-    if (message.includes('kinh nghiệm') || message.includes('experience') || message.includes('làm việc')) {
-      return this.generateExperienceResponse(message)
-    }
-    
-    if (message.includes('liên hệ') || message.includes('contact') || message.includes('email')) {
-      return this.generateContactResponse()
+    if (message.includes('liên hệ') || message.includes('contact') || message.includes('email') || message.includes('tuyển dụng') || message.includes('hire')) {
+      return isVietnamese
+        ? "Bạn có thể liên hệ với Thúy qua Email, LinkedIn, GitHub hoặc form liên hệ trên website này. Cô ấy rất welcome với opportunities mới - từ full-time, freelance đến consulting! 📧"
+        : "You can contact Thuy via Email, LinkedIn, GitHub, or the contact form on this website. She's very open to new opportunities - full-time, freelance, or consulting! 📧"
     }
 
-    if (message.includes('học vấn') || message.includes('education') || message.includes('đại học')) {
-      return this.generateEducationResponse()
-    }
-
-    if (message.includes('tuyển dụng') || message.includes('hiring') || message.includes('job')) {
-      return this.generateHiringResponse()
+    if (message.includes('học vấn') || message.includes('education') || message.includes('đại học') || message.includes('university')) {
+      return isVietnamese
+        ? "Thúy tốt nghiệp Computer Science với honors từ University of Technology (2018-2022). Nền tảng vững chắc về algorithms, data structures và software engineering. Quan trọng hơn là passion học hỏi liên tục! 🎓"
+        : "Thuy graduated with honors in Computer Science from University of Technology (2018-2022). Strong foundation in algorithms, data structures, and software engineering. Most importantly, she has a passion for continuous learning! 🎓"
     }
     
-    return this.generateSmartDefault(message)
-  }
-
-  generateContextualGreeting() {
-    const greetings = [
-      "Xin chào! Tôi là trợ lý AI của Thuy. Tôi có thể giúp bạn tìm hiểu về kinh nghiệm làm việc, kỹ năng lập trình, và các dự án của cô ấy. Bạn muốn biết gì nhất?",
-      "Hello! I'm Thuy's AI assistant. I can help you learn about her development skills, work experience, and projects. What would you like to know?",
-      "Chào bạn! Tôi được tạo ra để giúp bạn hiểu rõ hơn về portfolio của Thuy - một Full Stack Developer và QA Engineer tài năng. Hãy hỏi tôi bất cứ điều gì!"
-    ]
-    return greetings[Math.floor(Math.random() * greetings.length)]
-  }
-
-  generateProjectResponse(message) {
-    if (message.includes('ecommerce') || message.includes('thương mại')) {
-      return "Dự án E-Commerce Platform của Thuy rất ấn tượng! Được xây dựng với React, Node.js, MongoDB và tích hợp Stripe API. Dự án có đầy đủ tính năng: đăng nhập, giỏ hàng, thanh toán. Bạn có thể xem demo và source code trên trang Projects!"
-    }
-    
-    if (message.includes('task') || message.includes('quản lý')) {
-      return "Task Management App là một trong những dự án nổi bật - ứng dụng quản lý công việc theo nhóm với real-time updates, drag-and-drop, sử dụng React, TypeScript, Socket.io và PostgreSQL. Rất phù hợp cho team collaboration!"
-    }
-    
-    return "Thuy đã phát triển nhiều dự án thú vị: E-Commerce Platform (React + Node.js), Task Management App (với real-time features), Weather Dashboard, và chính website portfolio này! Mỗi dự án đều showcase các kỹ năng khác nhau từ frontend đến backend và database."
-  }
-
-  generateSkillResponse(message) {
-    if (message.includes('frontend') || message.includes('giao diện')) {
-      return "Về frontend, Thuy chuyên sâu React ecosystem: React, TypeScript, Next.js, HTML5, CSS3, Ant Design. Cô ấy rất giỏi tạo ra những giao diện user-friendly và responsive design!"
-    }
-    
-    if (message.includes('backend') || message.includes('server')) {
-      return "Backend skills của Thuy bao gồm Node.js, Express.js, Python, cùng với database MongoDB, PostgreSQL, MySQL. Cô ấy có kinh nghiệm xây dựng API robust và scalable architecture."
-    }
-    
-    if (message.includes('testing') || message.includes('test')) {
-      return "Thuy có expertise mạnh về Testing! Từ Manual Testing đến Automated Testing với Selenium, Jest, Cypress. Cô ấy hiểu rõ QA processes và có thể ensure code quality cao."
-    }
-    
-    return "Thuy là một Full Stack Developer toàn diện: Frontend (React, TypeScript), Backend (Node.js, Python), Database (MongoDB, PostgreSQL), Testing (Jest, Cypress, Selenium), và DevOps tools (Docker, AWS, Vercel). Một skillset rất impressive!"
-  }
-
-  generateExperienceResponse(message) {
-    if (message.includes('hiện tại') || message.includes('current')) {
-      return "Hiện tại Thuy đang làm Full Stack Developer tại Tech Solutions Inc. (từ 2023). Cô ấy develop web applications với React/Node.js, mentor junior developers, và optimize performance. Một role rất senior!"
-    }
-    
-    return "Thuy có career path rất solid: Junior Developer (2021-2022) → QA Engineer (2022-2023) → Full Stack Developer (2023-present). Sự kết hợp giữa development và QA experience giúp cô ấy tạo ra những sản phẩm chất lượng cao!"
-  }
-
-  generateContactResponse() {
-    return "Bạn có thể liên hệ với Thuy qua nhiều cách: Email (your.email@example.com), LinkedIn, GitHub, hoặc sử dụng contact form trên website. Cô ấy rất welcome với opportunities mới và tech discussions!"
-  }
-
-  generateEducationResponse() {
-    return "Thuy tốt nghiệp Bachelor of Computer Science tại University of Technology (2018-2022) với honors degree. Strong foundation về Data Structures, Algorithms, Database Systems, và Software Engineering!"
-  }
-
-  generateHiringResponse() {
-    return "Thuy đang open cho các opportunities mới! Cô ấy có thể làm full-time, freelance projects, hoặc consulting. Với skillset full-stack và QA experience, Thuy sẽ là asset tuyệt vời cho team bạn. Hãy liên hệ qua Contact page!"
-  }
-
-  generateSmartDefault(message) {
-    // Phân tích context và đưa ra câu trả lời thông minh
-    const responses = [
-      "Đó là câu hỏi hay! Dựa vào portfolio của Thuy, tôi nghĩ bạn có thể quan tâm đến projects, technical skills, hoặc work experience của cô ấy. Bạn muốn tìm hiểu aspect nào cụ thể?",
-      "Interesting question! Thuy's portfolio có rất nhiều information. Bạn có thể hỏi về her projects (e-commerce, task management), skills (React, Node.js, testing), hoặc how to contact her for opportunities!",
-      "Tôi hiểu bạn muốn biết thêm về Thuy! Cô ấy là một developer rất talented với experience trong cả development và QA. Hãy hỏi tôi về specific topics như projects, skills, hoặc career journey!"
-    ]
-    
-    return responses[Math.floor(Math.random() * responses.length)]
+    // Default responses
+    return isVietnamese ? 
+      "Tôi hiểu bạn muốn biết thêm về Thúy! Cô ấy là developer rất tài năng với kinh nghiệm cả development và QA. Bạn có thể hỏi về projects, technical skills, work experience hoặc cách liên hệ nhé! 😊" :
+      "I understand you want to learn more about Thuy! She's a very talented developer with experience in both development and QA. You can ask about her projects, technical skills, work experience, or how to contact her! 😊"
   }
 
   // Main method để get AI response

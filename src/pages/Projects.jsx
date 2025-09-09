@@ -20,7 +20,7 @@ const Projects = () => {
       id: 1,
       title: "E-Commerce Platform",
       description:
-        "A full-stack e-commerce platform built with React, Node.js, and MongoDB. Features include user authentication, product catalog, shopping cart, and payment integration.",
+        "A full-stack e-commerce platform built with React, Node.js, and MongoDB. Features include user authentication, product catalog, shopping cart",
       image: "/project1.jpg",
       technologies: ["React", "Node.js", "MongoDB", "Express.js", "Stripe API"],
       githubUrl: "https://github.com/yuhtnguyen/ecommerce-platform",

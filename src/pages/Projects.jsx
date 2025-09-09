@@ -297,7 +297,7 @@ const Projects = () => {
 
         <Row gutter={[24, 24]} style={{ marginBottom: "48px" }}>
           {projects.map((project) => (
-            <Col xs={24} sm={12} lg={12} xl={12} key={project.id}>
+            <Col xs={24} sm={24} lg={12} xl={12} key={project.id}>
               <ProjectCard project={project} />
             </Col>
           ))}

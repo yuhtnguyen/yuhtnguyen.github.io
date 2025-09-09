@@ -1,21 +1,24 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { Layout } from 'antd'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import ChatBot from './components/ChatBot'
-import Home from './pages/Home'
-import About from './pages/About'
-import Projects from './pages/Projects'
-import Resume from './pages/Resume'
-import Contact from './pages/Contact'
-import AIDebug from './pages/AIDebug'
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { Layout } from "antd";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import ChatBot from "./components/ChatBot";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Projects from "./pages/Projects";
+import Resume from "./pages/Resume";
+import Contact from "./pages/Contact";
+import AIDebug from "./pages/AIDebug";
 
-const { Content } = Layout
+const { Content } = Layout;
 
 function App() {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+
   return (
-    <Layout>
+    <Layout className={isHomePage ? "home-page-layout" : ""}>
       <Navbar />
       <Content className="ant-layout-content">
         <Routes>
@@ -30,7 +33,7 @@ function App() {
       <Footer />
       <ChatBot />
     </Layout>
-  )
+  );
 }
 
-export default App
+export default App;

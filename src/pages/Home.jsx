@@ -1,233 +1,271 @@
-import React from 'react'
-import { Typography, Button, Row, Col, Avatar, Space } from 'antd'
-import { DownloadOutlined, GithubOutlined, LinkedinOutlined } from '@ant-design/icons'
+import React, { useRef } from "react";
+import { Typography, Button, Row, Col, Carousel } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 
-const { Title, Paragraph } = Typography
+const { Title, Paragraph } = Typography;
 
 const Home = () => {
+  const carouselRef = useRef(null);
+
   const handleDownloadCV = () => {
-    // Download CV file
-    const link = document.createElement('a')
-    link.href = '/file/CV_ThuyNT_IT_SE.pdf'
-    link.download = 'CV_ThuyNT_IT_SE.pdf'
-    link.click()
-  }
+    const link = document.createElement("a");
+    link.href = "/file/CV_ThuyNT_IT_SE.pdf";
+    link.download = "CV_ThuyNT_IT_SE.pdf";
+    link.click();
+  };
+
+  const goToSlide = (slideIndex) => {
+    carouselRef.current?.goTo(slideIndex);
+  };
+
+  // Mỗi slide chứa hình ảnh + nội dung
+  const slides = [
+    {
+      image: "/image/01.jpg",
+      heading: "UI/UX Designer",
+      subheading: "Designing Intuitive and Engaging User Experiences",
+      description:
+        "Focused on user-centered design with clean and accessible interfaces to improve user satisfaction. Figma, Ant Design, Responsive Design,...",
+      buttonText: "View Projects",
+      buttonLink: "https://github.com/yuhtnguyen",
+    },
+    {
+      image: "/image/02.jpg",
+      heading: "QA/QC Engineer",
+      subheading: "Ensuring Quality Through Precise Testing",
+      description:
+        "Experienced in manual testing, writing test cases, and collaborating with development teams to deliver high-quality software. Manual Testing, Test Case Design, Bug Reporting, JIRA, Postman, SQL,...",
+      buttonText: "Learn More",
+      buttonLink: "https://linkedin.com/in/yuhtnguyen",
+    },
+  ];
 
   return (
-    <div style={{ 
-      marginTop: '-80px', 
-      marginBottom: '-24px',
-      paddingBottom: '0',
-      marginLeft: '-24px',
-      marginRight: '-24px'
-    }}>
-      {/* Hero Banner Section - Full Width */}
-      <div style={{
-        background: 'linear-gradient(135deg, #ffeef7 0%, #f8d7da 50%, #ffc1cc 100%)',
-        height: '100vh',
-        padding: '0',
-        position: 'relative',
-        overflow: 'hidden',
-        width: '100vw',
-        paddingTop: '56px'
-      }}>
-        <div style={{ 
-          maxWidth: '1200px', 
-          margin: '0 auto', 
-          height: '100%', 
-          display: 'flex', 
-          alignItems: 'center',
-          padding: '0 20px'
-        }}>
-          <Row 
-            justify="center" 
-            align="middle" 
-            style={{ width: '100%', height: '100%' }}
-            gutter={[48, 24]}
-          >
-            {/* Left Column - Text Content */}
-            <Col xs={24} lg={12} style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'center',
-              padding: '20px'
-            }}>
-              <div style={{ maxWidth: '600px' }}>
-                <Title 
-                  level={1} 
-                  style={{ 
-                    fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)',
-                    fontWeight: 'bold',
-                    color: '#2c3e50',
-                    marginBottom: '16px',
-                    lineHeight: 1.2,
-                    whiteSpace: 'nowrap'
+    <div
+      className="home-container"
+      style={{
+        marginTop: "-88px", // Đẩy lên để đè lên margin-top và padding của layout-content
+        marginLeft: "-24px",
+        marginRight: "-24px",
+        marginBottom: "0px", // Giữ khoảng cách an toàn với footer
+        width: "100vw",
+        overflow: "hidden",
+      }}
+    >
+      {/* Carousel full panel */}
+      <Carousel
+        ref={carouselRef}
+        autoplay
+        autoplaySpeed={5000}
+        dots={false}
+        effect="slide"
+        dotPosition="bottom"
+        swipeToSlide={true}
+        touchMove={true}
+        draggable={true}
+        style={{
+          position: "relative",
+          marginTop: "0px", // Không cần margin vì đã điều chỉnh container
+        }}
+      >
+        {slides.map((slide, index) => (
+          <div key={index}>
+            <div
+              style={{
+                minHeight: "calc(100vh - 100px)", // Tăng margin để tạo không gian cho dots
+                height: "auto",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "linear-gradient(135deg, #ffeef7 0%, #ffc1cc 100%)",
+                padding: "35px 20px 35px 20px", // Cân bằng padding top và bottom
+                "@media (max-width: 768px)": {
+                  padding: "25px 10px 25px 10px", // Mobile cũng cân bằng
+                  minHeight: "auto",
+                },
+              }}
+            >
+              <Row
+                gutter={[40, 40]}
+                align="middle"
+                justify="center"
+                style={{
+                  maxWidth: "1400px", // Tăng từ 1200px lên 1400px
+                  width: "100%",
+                  background: "white",
+                  borderRadius: "20px",
+                  boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
+                  overflow: "hidden",
+                  minHeight: "500px", // Tăng từ 450px lên 500px
+                  height: "auto",
+                }}
+              >
+                {/* Nội dung bên trái */}
+                <Col
+                  xs={24}
+                  md={12}
+                  style={{
+                    padding: "45px", // Tăng từ 35px lên 45px
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
                   }}
                 >
-                  Nguyen Thi Thuy
-                </Title>
-                
-                <Title 
-                  level={2}
-                  style={{ 
-                    fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
-                    fontWeight: '600',
-                    color: '#e91e63',
-                    marginBottom: '24px',
-                    lineHeight: 1.3
-                  }}
-                >
-                  Full Stack Developer
-                </Title>
-                
-                <Title 
-                  level={3}
-                  style={{ 
-                    fontSize: 'clamp(1.2rem, 2.5vw, 2rem)',
-                    fontWeight: '500',
-                    color: '#666',
-                    marginBottom: '32px',
-                    lineHeight: 1.4
-                  }}
-                >
-                  & QA Engineer
-                </Title>
-                
-                <Paragraph 
-                  style={{ 
-                    fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-                    color: '#555',
-                    marginBottom: '40px',
-                    lineHeight: 1.6
-                  }}
-                >
-                  Passionate developer with expertise in modern web technologies 
-                  and quality assurance. Creating efficient, scalable solutions 
-                  with the highest quality standards.
-                </Paragraph>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'row',
-                  gap: '16px',
-                  alignItems: 'center',
-                  flexWrap: 'wrap'
-                }}>
-                  <Button 
-                    type="primary" 
-                    size="large" 
-                    icon={<DownloadOutlined />}
-                    onClick={handleDownloadCV}
+                  <Title
+                    level={2}
                     style={{
-                      height: '50px',
-                      padding: '0 32px',
-                      fontSize: '16px',
-                      borderRadius: '25px',
-                      background: 'linear-gradient(45deg, #e91e63, #f06292)',
-                      border: 'none',
-                      boxShadow: '0 4px 15px rgba(233, 30, 99, 0.3)'
+                      fontSize: "clamp(2rem, 3vw, 3rem)",
+                      fontWeight: "bold",
+                      color: "#2c3e50",
+                      marginBottom: "16px",
                     }}
                   >
-                    Download CV
-                  </Button>
-                  
-                  <Button 
-                    size="large" 
-                    icon={<GithubOutlined />}
-                    href="https://github.com/yuhtnguyen"
-                    target="_blank"
+                    {slide.heading}
+                  </Title>
+                  <Title
+                    level={4}
                     style={{
-                      height: '50px',
-                      padding: '0 24px',
-                      borderRadius: '25px',
-                      border: '2px solid #e91e63',
-                      color: '#e91e63',
-                      fontSize: '16px'
+                      fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+                      color: "#e91e63",
+                      marginBottom: "24px",
                     }}
                   >
-                    GitHub
-                  </Button>
-                  
-                  <Button 
-                    size="large" 
-                    icon={<LinkedinOutlined />}
-                    href="https://linkedin.com/in/yuhtnguyen"
-                    target="_blank"
+                    {slide.subheading}
+                  </Title>
+                  <Paragraph
                     style={{
-                      height: '50px',
-                      padding: '0 24px',
-                      borderRadius: '25px',
-                      border: '2px solid #e91e63',
-                      color: '#e91e63',
-                      fontSize: '16px'
+                      fontSize: "1.1rem",
+                      lineHeight: 1.8,
+                      color: "#555",
+                      marginBottom: "32px",
                     }}
                   >
-                    LinkedIn
-                  </Button>
-                </div>
-              </div>
-            </Col>
+                    {slide.description}
+                  </Paragraph>
 
-            {/* Right Column - Profile Image */}
-            <Col xs={24} lg={12} style={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center',
-              position: 'relative'
-            }}>
-              <div style={{ position: 'relative' }}>
-                {/* Main profile image */}
-                <div style={{
-                  width: '350px',
-                  height: '350px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(10px)',
-                  border: '3px solid rgba(255, 255, 255, 0.3)'
-                }}>
-                  <Avatar
-                    src='/image/avt.jpg'
-                    style={{ 
-                      width: '320px',
-                      height: '320px',
-                      border: '4px solid white',
-                      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
+                  <div
+                    style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
+                  >
+                    <Button
+                      type="primary"
+                      size="large"
+                      href={slide.buttonLink}
+                      target="_blank"
+                      style={{
+                        height: "50px",
+                        padding: "0 28px",
+                        fontSize: "16px",
+                        borderRadius: "25px",
+                        background: "linear-gradient(45deg, #e91e63, #f06292)",
+                        border: "none",
+                        boxShadow: "0 6px 20px rgba(233,30,99,0.3)",
+                      }}
+                    >
+                      {slide.buttonText}
+                    </Button>
+
+                    <Button
+                      size="large"
+                      icon={<DownloadOutlined />}
+                      onClick={handleDownloadCV}
+                      style={{
+                        height: "50px",
+                        padding: "0 28px",
+                        fontSize: "16px",
+                        borderRadius: "25px",
+                        border: "2px solid #e91e63",
+                        color: "#e91e63",
+                        background: "white",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Download CV
+                    </Button>
+                  </div>
+                </Col>
+
+                {/* Hình ảnh bên phải */}
+                <Col
+                  xs={24}
+                  md={12}
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "420px", // Tăng từ 380px lên 420px
+                      overflow: "hidden",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
-                  />
-                </div>
-                
-                {/* Decorative elements */}
-                <div style={{
-                  position: 'absolute',
-                  top: '-20px',
-                  right: '-20px',
-                  width: '80px',
-                  height: '80px',
-                  background: 'linear-gradient(45deg, #ff9a9e, #fecfef)',
-                  borderRadius: '50%',
-                  opacity: 0.7
-                }} />
-                
-                <div style={{
-                  position: 'absolute',
-                  bottom: '-10px',
-                  left: '-30px',
-                  width: '60px',
-                  height: '60px',
-                  background: 'linear-gradient(45deg, #a18cd1, #fbc2eb)',
-                  borderRadius: '50%',
-                  opacity: 0.6
-                }} />
-              </div>
-            </Col>
-          </Row>
-        </div>
+                  >
+                    <img
+                      src={slide.image}
+                      alt={slide.heading}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain", // Thay đổi từ "cover" thành "contain" để hiển thị toàn bộ ảnh
+                        transition: "transform 0.5s ease",
+                      }}
+                    />
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </div>
+        ))}
+      </Carousel>
+
+      {/* Custom Dots Navigation - Đặt trong phạm vi an toàn */}
+      <div
+        className="carousel-custom-dots"
+        style={{
+          position: "absolute",
+          bottom: "35px", // Giảm từ 40px xuống 25px để cân bằng với padding
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1001,
+          display: "flex",
+          gap: "12px",
+        }}
+      >
+        {slides.map((_, dotIndex) => (
+          <button
+            key={dotIndex}
+            onClick={() => goToSlide(dotIndex)}
+            style={{
+              width: "12px",
+              height: "12px",
+              borderRadius: "50%",
+              border: "2px solid rgba(255, 255, 255, 0.8)",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              outline: "none",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "rgba(233, 30, 99, 0.8)";
+              e.target.style.borderColor = "#e91e63";
+              e.target.style.transform = "scale(1.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "transparent";
+              e.target.style.borderColor = "rgba(255, 255, 255, 0.8)";
+              e.target.style.transform = "scale(1)";
+            }}
+          />
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

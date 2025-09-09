@@ -17,6 +17,12 @@ body {
 
 .ant-layout {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.ant-layout-content {
+  flex: 1;
 }
 
 .ant-layout-header {
@@ -36,6 +42,18 @@ body {
   text-align: center;
   background: #001529;
   color: #fff;
+  position: relative;
+  z-index: 1000;
+}
+
+/* Ensure footer is not covered by home content */
+.home-page-layout .ant-layout-footer {
+  margin-top: 0 !important;
+  position: relative;
+  z-index: 1000;
+  /* Đảm bảo footer dính chặt với content */
+  border-top: none;
+  padding-top: 12px;
 }
 
 /* Custom styles */
@@ -50,6 +68,58 @@ body {
   margin-bottom: 40px;
   color: #1677ff;
   font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+/* Carousel custom styles */
+.ant-carousel .slick-dots {
+  display: none !important;
+}
+
+/* Custom dots positioning */
+.carousel-custom-dots {
+  min-height: 30px; /* Đảm bảo có không gian tối thiểu */
+  margin-bottom: 10px; /* Tạo khoảng cách với footer */
+}
+
+.ant-carousel .slick-dots li button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.ant-carousel .slick-dots li.slick-active button {
+  background: #e91e63;
+  border-color: #e91e63;
+  transform: scale(1.2);
+}
+
+.ant-carousel .slick-dots li button:hover {
+  background: rgba(233, 30, 99, 0.8);
+  border-color: #e91e63;
+  transform: scale(1.1);
+}
+
+/* Home page spacing */
+.home-container {
+  margin-top: -88px;
+  margin-bottom: 0px; /* Giữ khoảng cách an toàn với footer */
+  padding-top: 64px; /* Bù lại cho header fixed */
+  padding-bottom: 0px; /* Loại bỏ khoảng trắng với footer */
+}
+
+/* Override layout content for home page */
+.ant-layout-content:has(.home-container) {
+  padding: 0 !important;
+  margin-top: 64px !important;
+}
+
+/* Fallback for browsers that don't support :has() */
+.home-page-layout .ant-layout-content {
+  padding: 0 !important;
+  margin-top: 64px !important;
 }
 
 .skill-tag {
@@ -124,6 +194,39 @@ body {
     height: auto;
     padding: 8px 16px;
     font-size: 14px;
+  }
+
+  /* Home page carousel mobile optimizations */
+  .ant-carousel .slick-slide > div {
+    min-height: auto !important;
+  }
+  
+  .ant-carousel .slick-slide .ant-row {
+    min-height: 400px !important;
+  }
+
+  /* Balanced padding for carousel content on mobile */
+  .home-container .ant-col {
+    padding: 30px !important;
+  }
+
+  /* Adjust home container spacing on mobile */
+  .home-container {
+    margin-top: -88px !important;
+    margin-bottom: -12px !important; /* Điều chỉnh cho mobile */
+    padding-top: 64px !important;
+    padding-bottom: 0px !important;
+  }
+
+  /* Adjust custom dots on mobile */
+  .carousel-custom-dots {
+    bottom: 40px !important; /* Đảm bảo không đè lên footer */
+    gap: 8px !important;
+  }
+  
+  .carousel-custom-dots button {
+    width: 10px !important;
+    height: 10px !important;
   }
 
   /* ChatBot mobile optimizations */

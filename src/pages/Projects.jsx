@@ -118,14 +118,6 @@ const Projects = () => {
             borderColor: THEME_COLORS.primary,
             transition: "all 0.3s ease",
           }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = THEME_COLORS.primary;
-            e.target.style.color = "white";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";
-            e.target.style.color = THEME_COLORS.primary;
-          }}
         >
           <span className="mobile-hidden">Code</span>
         </Button>,
@@ -140,14 +132,6 @@ const Projects = () => {
             color: THEME_COLORS.secondary,
             borderColor: THEME_COLORS.secondary,
             transition: "all 0.3s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = THEME_COLORS.secondary;
-            e.target.style.color = "white";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";
-            e.target.style.color = THEME_COLORS.secondary;
           }}
         >
           <span className="mobile-hidden">Demo</span>

@@ -6,11 +6,16 @@ const { Footer: AntFooter } = Layout
 
 const Footer = () => {
   return (
-    <AntFooter style={{ padding: '24px 16px' }}>
+    <AntFooter style={{ 
+      padding: '12px 16px',
+      background: '#ffffff',
+      borderTop: '1px solid rgba(233, 30, 99, 0.1)',
+      boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.05)'
+    }}>
       <div style={{ textAlign: 'center' }}>
         <Space 
-          size="large" 
-          style={{ marginBottom: '16px' }}
+          size="medium" 
+          style={{ marginBottom: '6px' }}
           wrap
         >
           <a 
@@ -18,11 +23,25 @@ const Footer = () => {
             target="_blank" 
             rel="noopener noreferrer"
             style={{ 
-              color: '#fff', 
+              color: '#666', 
               fontSize: 'clamp(18px, 4vw, 20px)',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
+              transition: 'all 0.3s ease',
+              padding: '4px 8px',
+              borderRadius: '8px',
+              textDecoration: 'none'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.color = '#e91e63'
+              e.target.style.background = 'rgba(233, 30, 99, 0.05)'
+              e.target.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.color = '#666'
+              e.target.style.background = 'transparent'
+              e.target.style.transform = 'translateY(0)'
             }}
           >
             <GithubOutlined />
@@ -38,11 +57,25 @@ const Footer = () => {
             target="_blank" 
             rel="noopener noreferrer"
             style={{ 
-              color: '#fff', 
+              color: '#666', 
               fontSize: 'clamp(18px, 4vw, 20px)',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
+              transition: 'all 0.3s ease',
+              padding: '4px 8px',
+              borderRadius: '8px',
+              textDecoration: 'none'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.color = '#e91e63'
+              e.target.style.background = 'rgba(233, 30, 99, 0.05)'
+              e.target.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.color = '#666'
+              e.target.style.background = 'transparent'
+              e.target.style.transform = 'translateY(0)'
             }}
           >
             <LinkedinOutlined />
@@ -56,11 +89,25 @@ const Footer = () => {
           <a 
             href="mailto:your.email@example.com" 
             style={{ 
-              color: '#fff', 
+              color: '#666', 
               fontSize: 'clamp(18px, 4vw, 20px)',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
+              transition: 'all 0.3s ease',
+              padding: '4px 8px',
+              borderRadius: '8px',
+              textDecoration: 'none'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.color = '#e91e63'
+              e.target.style.background = 'rgba(233, 30, 99, 0.05)'
+              e.target.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.color = '#666'
+              e.target.style.background = 'transparent'
+              e.target.style.transform = 'translateY(0)'
             }}
           >
             <MailOutlined />
@@ -73,8 +120,9 @@ const Footer = () => {
           </a>
         </Space>
         <div style={{ 
-          fontSize: 'clamp(11px, 2vw, 13px)',
-          opacity: 0.8
+          fontSize: 'clamp(10px, 1.5vw, 12px)',
+          opacity: 0.7,
+          color: '#666'
         }}>
           © 2025 Nguyen Thi Thuy. All rights reserved.
         </div>

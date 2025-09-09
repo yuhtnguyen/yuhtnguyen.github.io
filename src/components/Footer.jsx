@@ -120,7 +120,7 @@ const Footer = () => {
           </a>
         </Space>
         <div style={{ 
-          fontSize: 'clamp(10px, 1.5vw, 12px)',
+          fontSize: 'clamp(12.5px, 1.5vw, 12px)',
           opacity: 0.7,
           color: '#666'
         }}>

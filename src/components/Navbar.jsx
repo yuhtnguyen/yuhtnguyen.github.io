@@ -69,7 +69,7 @@ const Navbar = () => {
           fontWeight: 'bold',
           whiteSpace: 'nowrap'
         }}>
-          Nguyen Thi Thuy
+          Nguyen Thi Thuy - Information Technology
         </div>
 
         {/* Desktop Menu */}

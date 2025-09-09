@@ -14,22 +14,22 @@ const THEME_COLORS = {
 
 const SLIDE_DATA = [
   {
-    images: ["/image/01.jpg", "/image/02.jpg", "/image/03.jpg"], // Mảng nhiều ảnh
+    images: ["/image/01.jpg", "/image/02.jpg", "/image/03.jpg"],
     heading: "UI/UX Designer",
     subheading: "Designing Intuitive and Engaging User Experiences",
     description:
       "Focused on user-centered design with clean and accessible interfaces to improve user satisfaction. Figma, Ant Design, Responsive Design,...",
-    buttonText: "View Projects",
+    buttonText: "Learn More",
     buttonLink: "https://github.com/yuhtnguyen",
   },
   {
-    images: ["/image/02.jpg", "/image/01.jpg", "/image/avt.jpg"], // Mảng nhiều ảnh
+    images: ["/image/07.jpg", "/image/08.jpg", "/image/09.jpg"],
     heading: "QA/QC Engineer",
     subheading: "Ensuring Quality Through Precise Testing",
     description:
       "Experienced in manual testing, writing test cases, and collaborating with development teams to deliver high-quality software. Manual Testing, Test Case Design, Bug Reporting, JIRA, Postman, SQL,...",
     buttonText: "Learn More",
-    buttonLink: "https://linkedin.com/in/yuhtnguyen",
+    buttonLink: "https://github.com/yuhtnguyen",
   },
 ];
 

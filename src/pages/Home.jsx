@@ -1,8 +1,8 @@
-import { useRef } from "react";
-import { Typography, Button, Row, Col, Carousel } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { useRef, useState } from "react";
+import { Typography, Button, Row, Col, Carousel, Modal, List, Tag, Divider } from "antd";
+import { DownloadOutlined, CheckCircleOutlined } from "@ant-design/icons";
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 // Constants
 const THEME_COLORS = {
@@ -14,22 +14,106 @@ const THEME_COLORS = {
 
 const SLIDE_DATA = [
   {
-    images: ["/image/01.jpg", "/image/02.jpg", "/image/03.jpg"],
-    heading: "UI/UX Designer",
-    subheading: "Designing Intuitive and Engaging User Experiences",
-    description:
-      "Focused on user-centered design with clean and accessible interfaces to improve user satisfaction. Figma, Ant Design, Responsive Design,...",
-    buttonText: "Learn More",
-    buttonLink: "https://github.com/yuhtnguyen",
-  },
-  {
     images: ["/image/07.jpg", "/image/08.jpg", "/image/09.jpg"],
     heading: "QA/QC Engineer",
     subheading: "Ensuring Quality Through Precise Testing",
     description:
       "Experienced in manual testing, writing test cases, and collaborating with development teams to deliver high-quality software. Manual Testing, Test Case Design, Bug Reporting, JIRA, Postman, SQL,...",
     buttonText: "Learn More",
-    buttonLink: "https://github.com/yuhtnguyen",
+    profileDetails: {
+      title: "My QA/QC Engineering Experience",
+      subtitle: "Quality Assurance & Software Testing Expertise",
+      experience: "1+ year",
+      specialization: "Manual Testing, API Testing, Bug Tracking",
+      keySkills: ["Manual Testing", "Test Case Design", "JIRA", "Postman", "SQL", "Bug Reporting", "API Testing"],
+      projects: [
+        {
+          name: "FPT Software - Software Tester Intern",
+          period: "04/2024 – 11/2024",
+          description: "Executed 500+ test cases, reported bugs via JIRA, performed API testing with Postman"
+        },
+        {
+          name: "GCIF – Capstone Project Management System",
+          period: "4/2025 – 8/2025",
+          description: "QA Testing for thesis management system, ensured system stability and user experience"
+        }
+      ],
+      achievements: [
+        "Successfully executed 500+ test cases based on requirements",
+        "Collaborated with development teams to verify fixes and ensure product quality",
+        "Gained hands-on experience in the complete software testing lifecycle",
+        "Researched requirements and wrote comprehensive test cases",
+        "Performed API testing using Postman and basic SQL queries"
+      ],
+      expertise: [
+        "Manual Testing Methodologies",
+        "Test Case Design and Execution",
+        "Bug Identification and Reporting",
+        "API Testing with Postman",
+        "Collaboration with Development Teams",
+        "Quality Assurance Best Practices",
+        "JIRA for Bug Tracking and Project Management"
+      ],
+      tools: ["JIRA", "Postman", "SQL", "Excel", "Test Management Tools"],
+      strengths: [
+        "Strong attention to detail and analytical thinking",
+        "Excellent communication skills for cross-team collaboration",
+        "Proactive approach to identifying potential issues",
+        "Quick learner with ability to adapt to new technologies",
+        "Commitment to delivering high-quality software products"
+      ]
+    }
+  },
+  {
+    images: ["/image/01.jpg", "/image/02.jpg", "/image/03.jpg"],
+    heading: "UI/UX Designer",
+    subheading: "Designing Intuitive and Engaging User Experiences",
+    description:
+      "Focused on user-centered design with clean and accessible interfaces to improve user satisfaction. Figma, Ant Design, Responsive Design,...",
+    buttonText: "Learn More",
+    profileDetails: {
+      title: "My UI/UX Design Experience",
+      subtitle: "User-Centered Design & Interface Development",
+      experience: "2+ years",
+      specialization: "UI Design, UX Research, Prototyping",
+      keySkills: ["Figma", "UI Design", "UX Design", "Prototyping", "User Research", "Responsive Design", "Design Systems"],
+      projects: [
+        {
+          name: "GCIF – Capstone Project Management System",
+          period: "4/2025 – 8/2025",
+          description: "Designed UI wireframes and user flows in Figma, ensuring usability and accessibility"
+        },
+        {
+          name: "BrainBox – E-learning Platform",
+          period: "2024",
+          description: "Designed wireframes and prototypes using Figma to streamline user experience"
+        }
+      ],
+      achievements: [
+        "Designed intuitive user interfaces that improved user satisfaction",
+        "Created wireframes and prototypes that streamlined development process",
+        "Ensured responsive design across different device sizes",
+        "Collaborated effectively with development teams for design implementation",
+        "Applied user-centered design principles to enhance usability"
+      ],
+      expertise: [
+        "User Interface (UI) Design",
+        "User Experience (UX) Research",
+        "Wireframing and Prototyping",
+        "Responsive Web Design",
+        "Design System Creation",
+        "User Flow and Journey Mapping",
+        "Accessibility and Usability Testing"
+      ],
+      tools: ["Figma", "Ant Design", "Adobe Creative Suite", "Prototyping Tools", "Design Systems"],
+      strengths: [
+        "Strong visual design sense and attention to aesthetics",
+        "Deep understanding of user-centered design principles",
+        "Ability to translate complex requirements into intuitive interfaces",
+        "Excellent collaboration skills with development teams",
+        "Continuous learning of modern design trends and best practices"
+      ]
+    }
   },
 ];
 
@@ -166,12 +250,24 @@ const STYLES = {
 
 const Home = () => {
   const carouselRef = useRef(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const handleDownloadCV = () => {
     const link = document.createElement("a");
-    link.href = "/file/CV_ThuyNT_IT_SE.pdf";
-    link.download = "CV_ThuyNT_IT_SE.pdf";
+    link.href = "/file/CV_ThuyNT_Tester.pdf";
+    link.download = "CV_ThuyNT_Tester.pdf";
     link.click();
+  };
+
+  const showJobModal = (profileDetails) => {
+    setSelectedJob(profileDetails);
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    setSelectedJob(null);
   };
 
   const goToSlide = (slideIndex) => carouselRef.current?.goTo(slideIndex);
@@ -211,8 +307,7 @@ const Home = () => {
               <Button
                 type="primary"
                 size="large"
-                href={slide.buttonLink}
-                target="_blank"
+                onClick={() => showJobModal(slide.profileDetails)}
                 style={STYLES.primaryButton}
               >
                 {slide.buttonText}
@@ -286,6 +381,156 @@ const Home = () => {
         {SLIDE_DATA.map(renderSlide)}
       </Carousel>
       {renderDots()}
+      
+      {/* Profile Details Modal */}
+      <Modal
+        title={
+          <div style={{ textAlign: "center", padding: "10px 0" }}>
+            <Title level={3} style={{ margin: 0, color: THEME_COLORS.primary }}>
+              {selectedJob?.title}
+            </Title>
+            <Text style={{ color: THEME_COLORS.textMuted, fontSize: "16px" }}>
+              {selectedJob?.subtitle}
+            </Text>
+          </div>
+        }
+        open={isModalVisible}
+        onCancel={handleModalClose}
+        footer={[
+          <Button key="close" onClick={handleModalClose} style={{ marginRight: "10px" }}>
+            Close
+          </Button>,
+          <Button
+            key="contact"
+            type="primary"
+            style={{
+              background: `linear-gradient(45deg, ${THEME_COLORS.primary}, ${THEME_COLORS.secondary})`,
+              border: "none",
+            }}
+            onClick={() => {
+              // Chuyển đến trang Contact
+              window.location.href = '/contact';
+              handleModalClose();
+            }}
+          >
+            Contact Me
+          </Button>,
+        ]}
+        width={800}
+        centered
+        bodyStyle={{ maxHeight: "70vh", overflowY: "auto" }}
+      >
+        {selectedJob && (
+          <div>
+            {/* Experience Overview */}
+            <Row gutter={[16, 8]} style={{ marginBottom: "20px" }}>
+              <Col span={12}>
+                <Text strong>Experience: </Text>
+                <Text style={{ color: THEME_COLORS.primary, fontWeight: "bold" }}>{selectedJob.experience}</Text>
+              </Col>
+              <Col span={12}>
+                <Text strong>Specialization: </Text>
+                <Text>{selectedJob.specialization}</Text>
+              </Col>
+            </Row>
+
+            <Divider />
+
+            {/* Key Skills */}
+            <div style={{ marginBottom: "20px" }}>
+              <Title level={5} style={{ color: THEME_COLORS.primary }}>Key Skills</Title>
+              <div>
+                {selectedJob.keySkills?.map((skill, index) => (
+                  <Tag key={index} color="pink" style={{ margin: "4px" }}>
+                    {skill}
+                  </Tag>
+                ))}
+              </div>
+            </div>
+
+            <Divider />
+
+            {/* Projects */}
+            <div style={{ marginBottom: "20px" }}>
+              <Title level={5} style={{ color: THEME_COLORS.primary }}>Recent Projects</Title>
+              {selectedJob.projects?.map((project, index) => (
+                <div key={index} style={{ marginBottom: "15px", padding: "10px", background: "#f9f9f9", borderRadius: "8px" }}>
+                  <Text strong style={{ color: THEME_COLORS.text }}>{project.name}</Text>
+                  <br />
+                  <Text style={{ color: THEME_COLORS.textMuted, fontSize: "12px" }}>{project.period}</Text>
+                  <br />
+                  <Text>{project.description}</Text>
+                </div>
+              ))}
+            </div>
+
+            <Divider />
+
+            {/* Achievements */}
+            <div style={{ marginBottom: "20px" }}>
+              <Title level={5} style={{ color: THEME_COLORS.primary }}>Key Achievements</Title>
+              <List
+                size="small"
+                dataSource={selectedJob.achievements}
+                renderItem={(item) => (
+                  <List.Item>
+                    <CheckCircleOutlined style={{ color: THEME_COLORS.primary, marginRight: "8px" }} />
+                    {item}
+                  </List.Item>
+                )}
+              />
+            </div>
+
+            <Divider />
+
+            {/* Expertise */}
+            <div style={{ marginBottom: "20px" }}>
+              <Title level={5} style={{ color: THEME_COLORS.primary }}>Areas of Expertise</Title>
+              <List
+                size="small"
+                dataSource={selectedJob.expertise}
+                renderItem={(item) => (
+                  <List.Item>
+                    <CheckCircleOutlined style={{ color: THEME_COLORS.secondary, marginRight: "8px" }} />
+                    {item}
+                  </List.Item>
+                )}
+              />
+            </div>
+
+            <Divider />
+
+            {/* Tools & Technologies */}
+            <div style={{ marginBottom: "20px" }}>
+              <Title level={5} style={{ color: THEME_COLORS.primary }}>Tools & Technologies</Title>
+              <div>
+                {selectedJob.tools?.map((tool, index) => (
+                  <Tag key={index} color="blue" style={{ margin: "4px" }}>
+                    {tool}
+                  </Tag>
+                ))}
+              </div>
+            </div>
+
+            <Divider />
+
+            {/* Strengths */}
+            <div>
+              <Title level={5} style={{ color: THEME_COLORS.primary }}>Professional Strengths</Title>
+              <List
+                size="small"
+                dataSource={selectedJob.strengths}
+                renderItem={(item) => (
+                  <List.Item>
+                    <CheckCircleOutlined style={{ color: "#52c41a", marginRight: "8px" }} />
+                    {item}
+                  </List.Item>
+                )}
+              />
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

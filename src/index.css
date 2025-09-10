@@ -39,7 +39,6 @@
   --z-index-navbar: 1000;
   --z-index-modal: 1010;
   --z-index-tooltip: 1020;
-  --z-index-chatbot: 1030;
 }
 
 /* Performance optimizations */
@@ -330,20 +329,6 @@ body {
   .carousel-custom-dots button {
     width: 10px !important;
     height: 10px !important;
-  }
-
-  /* ChatBot mobile optimizations */
-  .chatbot-container {
-    width: calc(100vw - 24px) !important;
-    right: 12px !important;
-    bottom: 12px !important;
-  }
-  
-  .chatbot-button {
-    width: 50px !important;
-    height: 50px !important;
-    right: 12px !important;
-    bottom: 12px !important;
   }
 }
 

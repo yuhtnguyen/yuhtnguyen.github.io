@@ -1,6 +1,6 @@
 # Portfolio Website - Nguyen Thi Thuy
 
-A modern, responsive personal portfolio website built with React (Vite) + Ant Design + AI ChatBot.
+A modern, responsive personal portfolio website built with React (Vite) + Ant Design.
 
 ## 🚀 Features
 
@@ -8,7 +8,6 @@ A modern, responsive personal portfolio website built with React (Vite) + Ant De
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **Fast Loading**: Built with Vite for optimal performance
 - **SEO Friendly**: Proper meta tags and semantic HTML structure
-- **🤖 AI ChatBot**: Smart AI assistant that can answer questions about skills, projects, and experience
 - **Easy to Customize**: Well-organized code structure for easy modifications
 
 ## 🛠️ Tech Stack
@@ -18,8 +17,6 @@ A modern, responsive personal portfolio website built with React (Vite) + Ant De
 - **UI Library**: Ant Design 5
 - **Routing**: React Router DOM 6
 - **Icons**: Ant Design Icons
-- **AI Integration**: Google Gemini / OpenAI APIs
-- **HTTP Client**: Axios
 - **Deployment**: Vercel
 
 ## 📁 Project Structure
@@ -33,19 +30,13 @@ portfolio/
 ├── src/
 │   ├── components/
 │   │   ├── Navbar.jsx       # Navigation component
-│   │   ├── Footer.jsx       # Footer component
-│   │   ├── ChatBot.jsx      # AI ChatBot component
-│   │   └── AISetupGuide.jsx # AI setup instructions
+│   │   └── Footer.jsx       # Footer component
 │   ├── pages/
 │   │   ├── Home.jsx         # Landing page
 │   │   ├── About.jsx        # About me page
 │   │   ├── Projects.jsx     # Projects showcase
 │   │   ├── Resume.jsx       # Resume page
 │   │   └── Contact.jsx      # Contact form
-│   ├── services/
-│   │   └── aiService.js     # AI integration service
-│   ├── data/
-│   │   └── chatBotData.js   # ChatBot fallback data
 │   ├── App.jsx              # Main app component
 │   ├── main.jsx             # Entry point
 │   └── index.css            # Global styles
@@ -53,23 +44,6 @@ portfolio/
 ├── vite.config.js
 └── vercel.json              # Vercel deployment config
 ```
-
-## 🤖 AI ChatBot
-
-The portfolio includes an intelligent AI chatbot that can answer questions about:
-- Technical skills and experience
-- Project details and demonstrations  
-- Contact information and hiring
-- Education and career background
-
-### Setup AI (Optional):
-The chatbot works out of the box with local AI. For enhanced responses:
-
-1. **Get API Key** (Free): [Google Gemini](https://makersuite.google.com/app/apikey)
-2. **Configure**: Update `GEMINI_API_KEY` in `src/services/aiService.js`
-3. **Test**: Ask the bot about projects, skills, or experience
-
-See [AI_CHATBOT_SETUP.md](./AI_CHATBOT_SETUP.md) for detailed instructions.
 
 ## 🏃‍♂️ Getting Started
 

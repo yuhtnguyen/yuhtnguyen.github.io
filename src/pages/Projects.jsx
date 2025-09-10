@@ -1,5 +1,5 @@
 import { Typography, Row, Col, Card, Button, Tag } from "antd";
-import { GithubOutlined, EyeOutlined } from "@ant-design/icons";
+import { GithubOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
@@ -18,53 +18,25 @@ const Projects = () => {
   const projects = [
     {
       id: 1,
-      title: "E-Commerce Platform",
+      title: "Thesync - UNDERGRADUATE THESIS PROJECT",
       description:
-        "A full-stack e-commerce platform built with React, Node.js, and MongoDB. Features include user authentication, product catalog, shopping cart",
-      image: "/project1.jpg",
-      technologies: ["React", "Node.js", "MongoDB", "Express.js", "Stripe API"],
+        "Application to Support Group Formation and Capstone Thesis Development for FPT University students",
+      image: "/image/project1.jpg",
+      technologies: ["Frontend Developer", "Tester", "UI/UX Designer"],
       githubUrl: "https://github.com/yuhtnguyen/ecommerce-platform",
       demoUrl: "https://ecommerce-demo.vercel.app",
       featured: true,
     },
     {
       id: 2,
-      title: "Task Management App",
+      title: "BrainBox – E-learning Platform",
       description:
-        "A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.",
-      image: "/project2.jpg",
-      technologies: [
-        "React",
-        "TypeScript",
-        "Socket.io",
-        "PostgreSQL",
-        "Docker",
-      ],
+        "A platform for paid courses, enabling learners to study and teachers to create and manage content easily",
+      image: "/image/project2.jpg",
+      technologies: ["Designer", "Frontend Developer", "QA/QC Engineer"],
       githubUrl: "https://github.com/yuhtnguyen/task-manager",
       demoUrl: "https://task-manager-demo.vercel.app",
       featured: true,
-    },
-    {
-      id: 3,
-      title: "Weather Dashboard",
-      description:
-        "A responsive weather dashboard that displays current weather conditions and forecasts for multiple cities with beautiful data visualizations.",
-      image: "/project3.jpg",
-      technologies: ["React", "Chart.js", "OpenWeather API", "CSS3"],
-      githubUrl: "https://github.com/yuhtnguyen/weather-dashboard",
-      demoUrl: "https://weather-dashboard-demo.vercel.app",
-      featured: false,
-    },
-    {
-      id: 4,
-      title: "Portfolio Website",
-      description:
-        "This very portfolio website built with React, Ant Design, and deployed on Vercel. Features responsive design and modern UI/UX.",
-      image: "/project4.jpg",
-      technologies: ["React", "Ant Design", "Vite", "Vercel"],
-      githubUrl: "https://github.com/yuhtnguyen/portfolio",
-      demoUrl: "https://portfolio-demo.vercel.app",
-      featured: false,
     },
   ];
 
@@ -76,19 +48,58 @@ const Projects = () => {
         <div
           style={{
             height: "clamp(150px, 20vw, 200px)",
-            background: THEME_COLORS.cardGradient,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "white",
-            fontSize: "clamp(14px, 3vw, 18px)",
-            fontWeight: "bold",
-            padding: "16px",
-            textAlign: "center",
             position: "relative",
             overflow: "hidden",
           }}
         >
+          <img
+            src={project.image}
+            alt={project.title}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              transition: "transform 0.3s ease",
+            }}
+            onError={(e) => {
+              e.target.style.display = "none";
+              e.target.nextSibling.style.display = "flex";
+            }}
+          />
+          <div
+            style={{
+              display: "none",
+              height: "100%",
+              background: THEME_COLORS.cardGradient,
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: "clamp(14px, 3vw, 18px)",
+              fontWeight: "bold",
+              padding: "16px",
+              textAlign: "center",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(255, 255, 255, 0.1)",
+                backdropFilter: "blur(2px)",
+              }}
+            />
+            <span style={{ position: "relative", zIndex: 1 }}>
+              {project.title}
+            </span>
+          </div>
           <div
             style={{
               position: "absolute",
@@ -96,47 +107,29 @@ const Projects = () => {
               left: 0,
               right: 0,
               bottom: 0,
-              background: "rgba(255, 255, 255, 0.1)",
-              backdropFilter: "blur(2px)",
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)",
+              opacity: 0,
+              transition: "opacity 0.3s ease",
+              display: "flex",
+              alignItems: "flex-end",
+              padding: "16px",
             }}
-          />
-          <span style={{ position: "relative", zIndex: 1 }}>
-            {project.title}
-          </span>
+            className="image-overlay"
+          >
+            <span
+              style={{
+                color: "white",
+                fontSize: "clamp(12px, 2.5vw, 14px)",
+                fontWeight: "600",
+                textShadow: "0 2px 4px rgba(0,0,0,0.8)",
+              }}
+            >
+              {project.title}
+            </span>
+          </div>
         </div>
       }
-      actions={[
-        <Button
-          key="github"
-          type="text"
-          icon={<GithubOutlined />}
-          href={project.githubUrl}
-          target="_blank"
-          size="small"
-          style={{
-            color: THEME_COLORS.primary,
-            borderColor: THEME_COLORS.primary,
-            transition: "all 0.3s ease",
-          }}
-        >
-          <span className="mobile-hidden">Code</span>
-        </Button>,
-        <Button
-          key="demo"
-          type="text"
-          icon={<EyeOutlined />}
-          href={project.demoUrl}
-          target="_blank"
-          size="small"
-          style={{
-            color: THEME_COLORS.secondary,
-            borderColor: THEME_COLORS.secondary,
-            transition: "all 0.3s ease",
-          }}
-        >
-          <span className="mobile-hidden">Demo</span>
-        </Button>,
-      ]}
       style={{
         height: "100%",
         borderRadius: "20px",
@@ -148,10 +141,22 @@ const Projects = () => {
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-5px)";
         e.currentTarget.style.boxShadow = "0 15px 40px rgba(233, 30, 99, 0.25)";
+        // Show overlay on hover
+        const overlay = e.currentTarget.querySelector(".image-overlay");
+        if (overlay) overlay.style.opacity = "1";
+        // Scale image slightly
+        const img = e.currentTarget.querySelector("img");
+        if (img) img.style.transform = "scale(1.1)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = "0 8px 25px rgba(233, 30, 99, 0.15)";
+        // Hide overlay
+        const overlay = e.currentTarget.querySelector(".image-overlay");
+        if (overlay) overlay.style.opacity = "0";
+        // Reset image scale
+        const img = e.currentTarget.querySelector("img");
+        if (img) img.style.transform = "scale(1)";
       }}
     >
       <Meta
@@ -208,7 +213,7 @@ const Projects = () => {
                   color: THEME_COLORS.text,
                 }}
               >
-                Tech Stack:
+                Role:
               </strong>
               <div style={{ marginTop: "8px" }}>
                 {project.technologies.map((tech) => (

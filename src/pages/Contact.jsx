@@ -17,6 +17,8 @@ import {
   LinkedinOutlined,
   SendOutlined,
 } from "@ant-design/icons";
+import emailjs from '@emailjs/browser';
+import { useState } from 'react';
 
 const { Title, Paragraph, Text } = Typography;
 const { TextArea } = Input;
@@ -31,11 +33,99 @@ const THEME_COLORS = {
 
 const Contact = () => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
-  const onFinish = () => {
-    // Handle form submission - could integrate with email service
-    message.success("Message sent successfully! I will get back to you soon.");
-    form.resetFields();
+  // EmailJS configuration
+  const EMAILJS_CONFIG = {
+    serviceId: 'service_ljjb4bq', // Bạn sẽ cần thay đổi này
+    templateId: 'template_1h1dn7i', // Bạn sẽ cần thay đổi này
+    publicKey: 'PTv4OOmQHsk80QEku' // Bạn sẽ cần thay đổi này
+  };
+
+  const onFinish = async (values) => {
+    setLoading(true);
+    
+    try {
+      // Kiểm tra xem EmailJS đã được cấu hình chưa
+      const isEmailJSConfigured = 
+        EMAILJS_CONFIG.serviceId !== 'your_service_id' &&
+        EMAILJS_CONFIG.templateId !== 'your_template_id' &&
+        EMAILJS_CONFIG.publicKey !== 'your_public_key';
+
+      if (isEmailJSConfigured) {
+        // Cấu hình template parameters cho EmailJS
+        const templateParams = {
+          from_name: values.name,
+          from_email: values.email,
+          subject: values.subject,
+          message: values.message,
+          to_email: 'nguyenthithuy1022003@gmail.com', // Email của bạn
+        };
+
+        // Debug: Hiển thị thông tin gửi
+        // eslint-disable-next-line no-console
+        console.log('EmailJS Config:', {
+          serviceId: EMAILJS_CONFIG.serviceId,
+          templateId: EMAILJS_CONFIG.templateId,
+          publicKey: EMAILJS_CONFIG.publicKey?.substring(0, 5) + '...'
+        });
+        // eslint-disable-next-line no-console
+        console.log('Template Params:', templateParams);
+
+        // Gửi email qua EmailJS
+        const result = await emailjs.send(
+          EMAILJS_CONFIG.serviceId,
+          EMAILJS_CONFIG.templateId,
+          templateParams,
+          EMAILJS_CONFIG.publicKey
+        );
+
+        // eslint-disable-next-line no-console
+        console.log('EmailJS Success:', result);
+        message.success("Message sent successfully! I will get back to you soon.");
+      } else {
+        // Fallback: Tạo mailto link để mở email client
+        const subject = encodeURIComponent(`Contact Form: ${values.subject}`);
+        const body = encodeURIComponent(
+          `Name: ${values.name}\n` +
+          `Email: ${values.email}\n` +
+          `Subject: ${values.subject}\n\n` +
+          `Message:\n${values.message}`
+        );
+        
+        const mailtoLink = `mailto:nguyenthithuy1022003@gmail.com?subject=${subject}&body=${body}`;
+        window.open(mailtoLink, '_blank');
+        
+        message.info("Email client opened! Please send the email from your email app. Or setup EmailJS for automatic sending.");
+      }
+      
+      form.resetFields();
+    } catch (error) {
+      // Debug: Hiển thị lỗi chi tiết
+      // eslint-disable-next-line no-console
+      console.error('EmailJS Error Details:', {
+        message: error.message,
+        status: error.status,
+        text: error.text
+      });
+      
+      let errorMessage = "Failed to send message. ";
+      
+      if (error.status === 400) {
+        errorMessage += "Invalid template or service configuration. ";
+      } else if (error.status === 403) {
+        errorMessage += "Public key authentication failed. ";
+      } else if (error.status === 404) {
+        errorMessage += "Service or template not found. ";
+      } else {
+        errorMessage += "Please try again or contact me directly via email. ";
+      }
+      
+      errorMessage += `Error: ${error.message}`;
+      message.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const contactInfo = [
@@ -323,6 +413,7 @@ const Contact = () => {
                   htmlType="submit"
                   size="large"
                   icon={<SendOutlined />}
+                  loading={loading}
                   block
                   style={{
                     height: "auto",
@@ -334,7 +425,7 @@ const Contact = () => {
                     boxShadow: "0 6px 20px rgba(233,30,99,0.3)",
                   }}
                 >
-                  Send Message
+                  {loading ? 'Sending...' : 'Send Message'}
                 </Button>
               </Form.Item>
             </Form>

@@ -1,4 +1,4 @@
-import { Typography, Card, Row, Col, Space, Divider } from "antd";
+import { Typography, Card, Row, Col, Space } from "antd";
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph, Text } = Typography;
@@ -64,32 +64,83 @@ const Resume = () => {
   return (
     <div className="page-container">
       <div style={{ textAlign: "center", marginBottom: "48px" }}>
-        <Title level={1} className="section-title" style={{ 
-          color: THEME_COLORS.primary,
-          fontSize: "clamp(2rem, 4vw, 3rem)",
-          textShadow: "0 2px 10px rgba(0,0,0,0.1)"
-        }}>
+        <Title
+          level={1}
+          className="section-title"
+          style={{
+            color: THEME_COLORS.primary,
+            fontSize: "clamp(2rem, 4vw, 3rem)",
+            textShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          }}
+        >
           Resume
         </Title>
-        <Paragraph style={{ 
-          fontSize: "clamp(16px, 3vw, 18px)", 
-          marginBottom: "24px", 
-          color: THEME_COLORS.secondary,
-          lineHeight: "1.6"
-        }}>
+        <Paragraph
+          style={{
+            fontSize: "clamp(16px, 3vw, 18px)",
+            marginBottom: "24px",
+            color: THEME_COLORS.secondary,
+            lineHeight: "1.6",
+          }}
+        >
           View my professional experience and background below
         </Paragraph>
       </div>
 
       <Row gutter={[32, 32]}>
-        {/* Contact Info */}
+        {/* Education & Contact Info */}
         <Col xs={24} lg={8}>
-          <Card title="Contact Information" style={{ 
-            marginBottom: "24px",
-            borderRadius: "15px",
-            boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
-            border: "1px solid rgba(233, 30, 99, 0.1)"
-          }}>
+          <Title
+            level={3}
+            style={{ color: THEME_COLORS.primary, marginBottom: "16px" }}
+          >
+            Education
+          </Title>
+          {education.map((edu, index) => (
+            <Card
+              key={index}
+              style={{
+                marginBottom: "24px",
+                borderRadius: "15px",
+                boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
+                border: "1px solid rgba(233, 30, 99, 0.1)",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow =
+                  "0 8px 25px rgba(233, 30, 99, 0.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 15px rgba(233, 30, 99, 0.1)";
+              }}
+            >
+              <div style={{ marginBottom: "16px" }}>
+                <Title level={4} style={{ marginBottom: "4px" }}>
+                  {edu.degree}
+                </Title>
+                <Text strong style={{ color: THEME_COLORS.primary }}>
+                  {edu.school}
+                </Text>
+                <Text style={{ float: "right", color: "#666" }}>
+                  {edu.period}
+                </Text>
+              </div>
+              <Text>{edu.description}</Text>
+            </Card>
+          ))}
+
+          <Card
+            title="Contact Information"
+            style={{
+              marginBottom: "24px",
+              borderRadius: "15px",
+              boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
+              border: "1px solid rgba(233, 30, 99, 0.1)",
+            }}
+          >
             <Space direction="vertical" size="middle">
               <div>
                 <MailOutlined
@@ -106,11 +157,14 @@ const Resume = () => {
             </Space>
           </Card>
 
-          <Card title="Skills Summary" style={{
-            borderRadius: "15px",
-            boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
-            border: "1px solid rgba(233, 30, 99, 0.1)"
-          }}>
+          <Card
+            title="Skills Summary"
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
+              border: "1px solid rgba(233, 30, 99, 0.1)",
+            }}
+          >
             <div style={{ marginBottom: "16px" }}>
               <Text strong>Frontend Development:</Text>
               <br />
@@ -129,27 +183,32 @@ const Resume = () => {
           </Card>
         </Col>
 
-        {/* Experience & Education */}
+        {/* Experience */}
         <Col xs={24} lg={16}>
           <Title level={3} style={{ color: THEME_COLORS.primary }}>
             Work Experience
           </Title>
           {experiences.map((exp, index) => (
-            <Card key={index} style={{ 
-              marginBottom: "24px",
-              borderRadius: "15px",
-              boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
-              border: "1px solid rgba(233, 30, 99, 0.1)",
-              transition: "all 0.3s ease"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 8px 25px rgba(233, 30, 99, 0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 15px rgba(233, 30, 99, 0.1)";
-            }}>
+            <Card
+              key={index}
+              style={{
+                marginBottom: "24px",
+                borderRadius: "15px",
+                boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
+                border: "1px solid rgba(233, 30, 99, 0.1)",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow =
+                  "0 8px 25px rgba(233, 30, 99, 0.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 15px rgba(233, 30, 99, 0.1)";
+              }}
+            >
               <div style={{ marginBottom: "16px" }}>
                 <Title level={4} style={{ marginBottom: "4px" }}>
                   {exp.title}
@@ -163,7 +222,9 @@ const Resume = () => {
                 {exp.techStack && (
                   <div style={{ marginTop: "8px" }}>
                     <Text strong>Tech Stack: </Text>
-                    <Text style={{ color: THEME_COLORS.textMuted }}>{exp.techStack}</Text>
+                    <Text style={{ color: THEME_COLORS.textMuted }}>
+                      {exp.techStack}
+                    </Text>
                   </div>
                 )}
               </div>
@@ -174,42 +235,6 @@ const Resume = () => {
                   </li>
                 ))}
               </ul>
-            </Card>
-          ))}
-
-          <Divider />
-
-          <Title level={3} style={{ color: THEME_COLORS.primary }}>
-            Education
-          </Title>
-          {education.map((edu, index) => (
-            <Card key={index} style={{ 
-              marginBottom: "24px",
-              borderRadius: "15px",
-              boxShadow: "0 4px 15px rgba(233, 30, 99, 0.1)",
-              border: "1px solid rgba(233, 30, 99, 0.1)",
-              transition: "all 0.3s ease"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 8px 25px rgba(233, 30, 99, 0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 15px rgba(233, 30, 99, 0.1)";
-            }}>
-              <div style={{ marginBottom: "16px" }}>
-                <Title level={4} style={{ marginBottom: "4px" }}>
-                  {edu.degree}
-                </Title>
-                <Text strong style={{ color: THEME_COLORS.primary }}>
-                  {edu.school}
-                </Text>
-                <Text style={{ float: "right", color: "#666" }}>
-                  {edu.period}
-                </Text>
-              </div>
-              <Text>{edu.description}</Text>
             </Card>
           ))}
         </Col>

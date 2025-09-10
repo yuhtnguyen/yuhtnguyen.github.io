@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path'
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
@@ -19,8 +18,7 @@ export default defineConfig({
         manualChunks: {
           // Vendor chunks for better caching
           vendor: ['react', 'react-dom'],
-          antd: ['antd', '@ant-design/icons'],
-          utils: ['axios']
+          antd: ['antd', '@ant-design/icons']
         }
       }
     },

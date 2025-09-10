@@ -117,7 +117,7 @@ const About = () => {
               color: "#4a5568", // Màu xám đậm dễ đọc
             }}
           >
-            MWith hands-on experience in frontend development, UI/UX design, and
+            With hands-on experience in frontend development, UI/UX design, and
             software testing, I bring a well-rounded perspective to building
             reliable and scalable digital solutions.
           </Paragraph>

@@ -29,7 +29,7 @@ const SLIDE_DATA = [
       projects: [
         {
           name: "FPT Software - Software Tester Intern",
-          period: "04/2024 – 11/2024",
+          period: "08/2023 – 11/2024",
           description: "Executed 500+ test cases, reported bugs via JIRA, performed API testing with Postman"
         },
         {

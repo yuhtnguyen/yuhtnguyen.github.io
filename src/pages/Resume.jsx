@@ -16,7 +16,7 @@ const Resume = () => {
     {
       title: "Software Tester Intern",
       company: "FPT Software",
-      period: "04/2024 – 11/2024",
+      period: "",
       description: [
         "Gained hands-on experience in the software testing lifecycle",
         "Researched requirements and wrote comprehensive test cases",

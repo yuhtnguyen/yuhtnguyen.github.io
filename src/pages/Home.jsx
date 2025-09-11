@@ -255,7 +255,7 @@ const Home = () => {
 
   const handleDownloadCV = () => {
     const link = document.createElement("a");
-    link.href = "/file/CV_ThuyNT_TESTER.pdf";
+    link.href = "/file/CV_ThuyNT_Tester.pdf";
     link.download = "CV_ThuyNT_Tester.pdf";
     link.click();
   };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Row, Col, Card, Tag, Avatar } from "antd";
+import { Typography, Row, Col, Card, Tag } from "antd";
 import { CodeOutlined, BugOutlined, ToolOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph } = Typography;
@@ -73,16 +73,29 @@ const About = () => {
             alignItems: "center",
           }}
         >
-          <Avatar
-            size={{ xs: 200, sm: 240, md: 280, lg: 320, xl: 360 }} // Tăng kích thước avatar lớn hơn
-            src="/image/avt.jpg"
+          <div
             style={{
-              border: "6px solid #df7e9eff", // Đổi border thành màu hồng
-              display: "block",
-              margin: "0 auto",
-              boxShadow: "0 12px 35px rgba(233, 30, 99, 0.2)", // Shadow màu hồng nhạt
+              width: "100%",
+              maxWidth: "300px",
+              height: "320px",
+              borderRadius: "12px",
+              overflow: "hidden",
+              border: "6px solid #df7e9eff",
+              boxShadow: "0 12px 35px rgba(233, 30, 99, 0.2)",
+              position: "relative",
             }}
-          />
+          >
+            <img
+              src="/image/04.jpg"
+              alt="Profile"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
+          </div>
         </Col>
 
         <Col xs={24} md={16}>
